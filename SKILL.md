@@ -72,3 +72,22 @@ Never start a final render until the package establishes: scene beat, exact char
 ## Delivery
 
 A final local 3D shot must include the editable scene file, linked asset manifest, render settings, image sequence or lossless master, encoded review file, audio references, and a review decision. Archive these with the script and canon so the project is reproducible without Google Flow.
+
+## Mandatory asset-grounding gate — no substitutions
+
+This gate applies to Blender and to every local image-to-video engine, including MiniMax H3 where it is installed. Its purpose is to prevent unapproved visual invention.
+
+1. Create `01-authority/asset-lock.json` before any preview. It must list every visible character, location, prop, wardrobe item, fixed geography object, and reference image path.
+2. The shot card must name the exact approved reference for each visible asset, the exact count, and the allowed state. “Similar”, “inspired by”, or a prompt-only description fails the gate.
+3. **Blender:** build or import an editable mesh/rig that matches the approved image. Produce a single-frame camera-match preview beside the source reference. Verify silhouette, proportions, materials, colors, visible controls, wardrobe, fixed architecture, and prop placement. Do not render animation until that preview is marked `approved` in the ledger.
+4. **Image-to-video:** supply the approved source image(s) through the engine’s documented image-reference input. If the engine has no working reference-image input, it is not eligible for a locked shot. Do not fall back to text-to-video.
+5. Every preview and final candidate is rejected if it adds, removes, duplicates, replaces, or changes a locked asset; changes character identity, wardrobe, door/window state, prop design, or geography; or makes unapproved dialogue, hands, interactions, text, or logos.
+6. Render only after the asset gate script passes and the visual preview passes review. A missing source reference, missing editable asset, unavailable reference-image route, or ambiguous match is a `BLOCKED` status, never permission to improvise.
+
+Run the local check before each preview or final render:
+
+```bash
+python3 scripts/validate_asset_gate.py /absolute/path/to/unit
+```
+
+Use [asset grounding protocol](references/asset-grounding-gate.md) for the required JSON format and the side-by-side review method.
