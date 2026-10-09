@@ -31,13 +31,13 @@ for i, asset in enumerate(assets if isinstance(assets, list) else []):
         if not asset.get(field):
             errors.append(f'assets[{i}] missing {field}')
     ref = asset.get('reference')
-    if ref and not (unit / ref).resolve().is_file():
+    if ref and not (lock_path.parent / ref).resolve().is_file():
         errors.append(f'assets[{i}] reference does not exist: {ref}')
     if route == 'blender':
         editable = asset.get('editable_asset')
         if not editable:
             errors.append(f'assets[{i}] needs editable_asset for Blender')
-        elif not (unit / editable).resolve().is_file():
+        elif not (lock_path.parent / editable).resolve().is_file():
             errors.append(f'assets[{i}] editable asset does not exist: {editable}')
 if not lock.get('exclusions'):
     errors.append('exclusions must specify disallowed people, props, text, or interactions')
